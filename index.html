@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Drill Aritmetika Dasar</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+        }
+        .game-card {
+            background-color: #1e293b;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        h1, h2 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-success {
+            background-color: #16a34a;
+        }
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background-color: #0f172a;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f172a;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .hearts {
+            color: #ef4444;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+        .timer-bar-container {
+            width: 100%;
+            background-color: #334155;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .timer-bar {
+            height: 100%;
+            background-color: #eab308;
+            width: 100%;
+            transition: width 1s linear;
+        }
+        .question-box {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #38bdf8;
+            letter-spacing: 1px;
+        }
+        .level-badge {
+            background-color: #0284c7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .report-table th, .report-table td {
+            border: 1px solid #475569;
+            padding: 8px;
+        }
+        .report-table th {
+            background-color: #0f172a;
+            color: #38bdf8;
+        }
+        .text-correct { color: #4ade80; }
+        .text-wrong { color: #f87171; }
+        .hide { display: none; }
+        
+        @media print {
+            body { background: white; color: black; }
+            .game-card { border: none; box-shadow: none; width: 100%; max-width: 100%; color: black; background: white; }
+            .btn, .no-print { display: none; }
+            .report-table th, .report-table td { border: 1px solid #000; color: black; }
+            h1, h2 { color: black; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-card">
+    <div id="start-screen">
+        <h1>Kuis Drill Aritmetika</h1>
+        <p style="color: #94a3b8; font-size: 0.95rem;">Uji kemampuan operasi bilangan bulat (5 Level, 3 Nyawa, & Timer).</p>
+        <div style="text-align: left; background: #0f172a; padding: 12px; border-radius: 8px; margin: 15px 0; font-size: 0.85rem;">
+            <strong>Ketentuan Game:</strong><br>
+            • Level 1: Penjumlahan (15s/soal)<br>
+            • Level 2: Pengurangan (15s/soal)<br>
+            • Level 3: Perkalian (20s/soal)<br>
+            • Level 4: Pembagian (20s/soal)<br>
+            • Level 5: Operasi Campuran (30s/soal)<br>
+            • Setiap Level terdiri dari 5 Soal.
+        </div>
+        <input type="text" id="player-name" placeholder="Masukkan Nama Lengkap" required>
+        <button class="btn btn-success" onclick="startGame()">Mulai Permainan</button>
+    </div>
+
+    <div id="game-screen" class="hide">
+        <div class="stats-bar">
+            <div><span class="level-badge" id="level-indicator">Level 1</span></div>
+            <div>Nyawa: <span class="hearts" id="hearts-display">♥♥♥</span></div>
+            <div>Skor: <strong id="score-display">0</strong></div>
+        </div>
+
+        <div class="timer-bar-container">
+            <div class="timer-bar" id="timer-bar"></div>
+        </div>
+
+        <div style="font-size: 0.9rem; color: #94a3b8;" id="question-number">Soal 1 dari 5</div>
+        <div class="question-box" id="question-display">0 + 0</div>
+
+        <form onsubmit="submitAnswer(event)">
+            <input type="number" id="answer-input" placeholder="Ketik jawaban..." autocomplete="off" autofocus>
+            <button type="submit" class="btn">Kirim Jawaban</button>
+        </form>
+    </div>
+
+    <div id="result-screen" class="hide">
+        <h2 id="result-title">Hasil Kuis</h2>
+        <p id="result-subtitle" style="color: #94a3b8;"></p>
+
+        <div style="background: #0f172a; padding: 15px; border-radius: 8px; text-align: left; margin-bottom: 15px;">
+            <p style="margin: 5px 0;"><strong>Nama:</strong> <span id="res-name">-</span></p>
+            <p style="margin: 5px 0;"><strong>Total Skor:</strong> <span id="res-score">0</span></p>
+            <p style="margin: 5px 0;"><strong>Level Terakhir:</strong> <span id="res-level">-</span></p>
+        </div>
+
+        <h3>Rincian Soal & Jawaban</h3>
+        <div style="max-height: 200px; overflow-y: auto;">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Soal</th>
+                        <th>Jawaban Anda</th>
+                        <th>Kunci</th>
+                    </tr>
+                </thead>
+                <tbody id="report-body">
+                    </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-success no-print" onclick="window.print()">Cetak / Simpan PDF Bukti Nilai</button>
+        <button class="btn no-print" style="background-color: #475569;" onclick="location.reload()">Main Lagi</button>
+    </div>
+</div>
+
+<script>
+    // Konfigurasi Level & Waktu
+    const levelConfigs = {
+        1: { name: "Level 1: Penjumlahan", time: 15 },
+        2: { name: "Level 2: Pengurangan", time: 15 },
+        3: { name: "Level 3: Perkalian", time: 20 },
+        4: { name: "Level 4: Pembagian", time: 20 },
+        5: { name: "Level 5: Operasi Campuran", time: 30 }
+    };
+
+    let playerName = "";
+    let currentLevel = 1;
+    let currentQuestionIndex = 0; // 0 sampai 4 (5 soal per level)
+    let score = 0;
+    let lives = 3;
+    let timer = null;
+    let timeLeft = 0;
+    let currentQuestion = null;
+    let gameHistory = [];
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateQuestion(level) {
+        let a, b, c, qText, ans;
+        
+        if (level === 1) { // Penjumlahan
+            a = getRandomInt(-20, 20);
+            b = getRandomInt(-20, 20);
+            qText = `${a < 0 ? `(${a})` : a} + ${b < 0 ? `(${b})` : b}`;
+            ans = a + b;
+        } else if (level === 2) { // Pengurangan
+            a = getRandomInt(-20, 20);
+            b = getRandomInt(-20, 20);
+            qText = `${a < 0 ? `(${a})` : a} - ${b < 0 ? `(${b})` : b}`;
+            ans = a - b;
+        } else if (level === 3) { // Perkalian
+            a = getRandomInt(-12, 12);
+            b = getRandomInt(-12, 12);
+            qText = `${a < 0 ? `(${a})` : a} × ${b < 0 ? `(${b})` : b}`;
+            ans = a * b;
+        } else if (level === 4) { // Pembagian (Hasil bulat)
+            ans = getRandomInt(-10, 10);
+            if (ans === 0) ans = 1;
+            b = getRandomInt(-10, 10);
+            if (b === 0) b = 2;
+            a = ans * b; // Memastikan a / b = ans
+            qText = `${a < 0 ? `(${a})` : a} ÷ ${b < 0 ? `(${b})` : b}`;
+        } else if (level === 5) { // Operasi Campuran
+            const type = getRandomInt(1, 2);
+            a = getRandomInt(-10, 10);
+            b = getRandomInt(-5, 5);
+            c = getRandomInt(-10, 10);
+            if (type === 1) {
+                // a + b * c
+                qText = `${a < 0 ? `(${a})` : a} + ${b < 0 ? `(${b})` : b} × ${c < 0 ? `(${c})` : c}`;
+                ans = a + (b * c);
+            } else {
+                // a * b - c
+                qText = `${a < 0 ? `(${a})` : a} × ${b < 0 ? `(${b})` : b} - ${c < 0 ? `(${c})` : c}`;
+                ans = (a * b) - c;
+            }
+        }
+
+        return { questionText: qText, correctAnswer: ans };
+    }
+
+    function startGame() {
+        const nameInput = document.getElementById('player-name').value.trim();
+        if (!nameInput) {
+            alert("Silakan masukkan nama Anda terlebih dahulu!");
+            return;
+        }
+        playerName = nameInput;
+
+        document.getElementById('start-screen').classList.add('hide');
+        document.getElementById('game-screen').classList.remove('hide');
+
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        if (lives <= 0) {
+            endGame(false);
+            return;
+        }
+
+        if (currentQuestionIndex >= 5) {
+            currentLevel++;
+            currentQuestionIndex = 0;
+            if (currentLevel > 5) {
+                endGame(true); // Tamat 5 Level
+                return;
+            }
+        }
+
+        currentQuestion = generateQuestion(currentLevel);
+        
+        // Update UI
+        document.getElementById('level-indicator').innerText = levelConfigs[currentLevel].name;
+        document.getElementById('score-display').innerText = score;
+        document.getElementById('question-number').innerText = `Soal ${currentQuestionIndex + 1} dari 5`;
+        document.getElementById('question-display').innerText = currentQuestion.questionText;
+        document.getElementById('answer-input').value = '';
+        document.getElementById('answer-input').focus();
+
+        updateHeartsUI();
+        startTimer();
+    }
+
+    function updateHeartsUI() {
+        let heartsStr = "";
+        for (let i = 0; i < lives; i++) heartsStr += "♥";
+        document.getElementById('hearts-display').innerText = heartsStr;
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        const maxTime = levelConfigs[currentLevel].time;
+        timeLeft = maxTime;
+        
+        const timerBar = document.getElementById('timer-bar');
+        timerBar.style.width = '100%';
+
+        timer = setInterval(() => {
+            timeLeft--;
+            const percentage = (timeLeft / maxTime) * 100;
+            timerBar.style.width = `${percentage}%`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                handleAnswer(null, true); // Waktu Habis
+            }
+        }, 1000);
+    }
+
+    function submitAnswer(e) {
+        e.preventDefault();
+        clearInterval(timer);
+        const userAns = parseInt(document.getElementById('answer-input').value);
+        handleAnswer(isNaN(userAns) ? null : userAns, false);
+    }
+
+    function handleAnswer(userAns, isTimeout) {
+        const isCorrect = !isTimeout && (userAns === currentQuestion.correctAnswer);
+
+        // Simpan histori soal
+        gameHistory.push({
+            question: currentQuestion.questionText,
+            userAnswer: isTimeout ? "Waktu Habis" : (userAns === null ? "-" : userAns),
+            correctAnswer: currentQuestion.correctAnswer,
+            isCorrect: isCorrect
+        });
+
+        if (isCorrect) {
+            score += (currentLevel * 10); // Skor bertambah sesuai level
+        } else {
+            lives--;
+        }
+
+        currentQuestionIndex++;
+        loadQuestion();
+    }
+
+    function endGame(isWin) {
+        clearInterval(timer);
+        document.getElementById('game-screen').classList.add('hide');
+        document.getElementById('result-screen').classList.remove('hide');
+
+        document.getElementById('res-name').innerText = playerName;
+        document.getElementById('res-score').innerText = score;
+        document.getElementById('res-level').innerText = levelConfigs[Math.min(currentLevel, 5)].name;
+
+        if (isWin) {
+            document.getElementById('result-title').innerText = "Selamat! Anda Tamat!";
+            document.getElementById('result-title').style.color = "#4ade80";
+            document.getElementById('result-subtitle').innerText = "Luar biasa! Anda berhasil menyelesaikan 5 Level Aritmetika.";
+        } else {
+            document.getElementById('result-title').innerText = "Game Over!";
+            document.getElementById('result-title').style.color = "#f87171";
+            document.getElementById('result-subtitle').innerText = "Nyawa Anda telah habis. Tetap semangat dan coba lagi!";
+        }
+
+        // Tampilkan Tabel Laporan
+        const tbody = document.getElementById('report-body');
+        tbody.innerHTML = '';
+        
+        gameHistory.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.question}</td>
+                <td class="${item.isCorrect ? 'text-correct' : 'text-wrong'}">${item.userAnswer}</td>
+                <td>${item.correctAnswer}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+</script>
+
+</body>
+</html>
