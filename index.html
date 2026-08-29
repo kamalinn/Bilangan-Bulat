@@ -4,29 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuis Drill Aritmetika Dasar</title>
+
+    <!-- Font Nunito: Membulat, Santai, dan Ceria -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
-        .game-card { background-color: #1e293b; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid #334155; text-align: center; }
-        h1, h2 { margin-top: 0; color: #38bdf8; }
-        .btn { background-color: #2563eb; color: white; border: none; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; transition: background 0.2s; }
-        .btn:hover { background-color: #1d4ed8; }
-        .btn-success { background-color: #16a34a; }
-        .btn-success:hover { background-color: #15803d; }
-        input[type="text"], input[type="number"] { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #475569; background-color: #0f172a; color: white; font-size: 1rem; text-align: center; }
-        .stats-bar { display: flex; justify-content: space-between; align-items: center; background-color: #0f172a; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.95rem; }
-        .hearts { color: #ef4444; font-size: 1.2rem; letter-spacing: 2px; }
-        .timer-bar-container { width: 100%; background-color: #334155; height: 8px; border-radius: 4px; margin-bottom: 10px; overflow: hidden; }
-        .timer-bar { height: 100%; background-color: #eab308; width: 100%; transition: width 1s linear; }
-        .question-box { font-size: 2.2rem; font-weight: bold; margin: 20px 0; background: #0f172a; padding: 20px; border-radius: 12px; border: 2px solid #38bdf8; letter-spacing: 1px; }
-        .level-badge { background-color: #0284c7; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
-        .report-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; text-align: left; }
-        .report-table th, .report-table td { border: 1px solid #475569; padding: 8px; }
-        .report-table th { background-color: #0f172a; color: #38bdf8; }
-        .text-correct { color: #4ade80; }
-        .text-wrong { color: #f87171; }
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        /* Background Luar: Gradasi Biru Ceria */
+        body { 
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); 
+            color: #1e293b; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 15px; 
+        }
+
+        /* Kartu Utama Game */
+        .game-card { 
+            background-color: #ffffff; 
+            border-radius: 24px; 
+            padding: 28px; 
+            width: 100%; 
+            max-width: 500px; 
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.15); 
+            border: 2px solid #e0f2fe; 
+            text-align: center; 
+        }
+
+        h1 { color: #0284c7; font-size: 1.9rem; margin-top: 0; font-weight: 800; }
+        h2 { color: #0369a1; margin-top: 0; font-weight: 800; }
+        h3 { color: #0284c7; font-weight: 700; }
+
+        /* Tombol Interaktif */
+        .btn { 
+            background-color: #3b82f6; 
+            color: white; 
+            border: none; 
+            padding: 14px 24px; 
+            font-size: 1.05rem; 
+            font-weight: 800; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 15px; 
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.2s ease; 
+        }
+        .btn:hover { background-color: #2563eb; transform: translateY(-2px); }
+        .btn-success { background-color: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .btn-success:hover { background-color: #059669; }
+
+        /* Input Identitas & Jawaban */
+        input[type="text"], input[type="number"] { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 8px 0; 
+            border-radius: 14px; 
+            border: 2px solid #cbd5e1; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+            font-size: 1.05rem; 
+            font-weight: 700;
+            text-align: center; 
+            outline: none;
+            transition: border 0.2s, background-color 0.2s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: #38bdf8;
+            background-color: #ffffff;
+        }
+
+        /* Baris Informasi Nyawa & Skor */
+        .stats-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background-color: #f0f9ff; 
+            padding: 12px 18px; 
+            border-radius: 16px; 
+            margin-bottom: 20px; 
+            font-size: 0.95rem; 
+            font-weight: 700;
+            border: 1px solid #bae6fd;
+        }
+        .hearts { color: #ef4444; font-size: 1.3rem; letter-spacing: 2px; }
+
+        /* Bar Waktu */
+        .timer-bar-container { 
+            width: 100%; 
+            background-color: #e2e8f0; 
+            height: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 12px; 
+            overflow: hidden; 
+        }
+        .timer-bar { height: 100%; background-color: #f59e0b; width: 100%; transition: width 1s linear; }
+
+        /* Kotak Soal Ceria */
+        .question-box { 
+            font-size: 2.3rem; 
+            font-weight: 800; 
+            margin: 20px 0; 
+            background: #fef9c3; 
+            color: #854d0e;
+            padding: 22px; 
+            border-radius: 18px; 
+            border: 3px dashed #fde047; 
+            letter-spacing: 1px; 
+        }
+
+        .level-badge { 
+            background-color: #0ea5e9; 
+            color: white;
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            font-size: 0.85rem; 
+            font-weight: 800; 
+        }
+
+        /* Tabel Hasil Ringkasan */
+        .report-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; text-align: left; }
+        .report-table th, .report-table td { border: 1px solid #cbd5e1; padding: 10px; }
+        .report-table th { background-color: #f1f5f9; color: #0284c7; font-weight: 800; }
+        .text-correct { color: #16a34a; font-weight: 800; }
+        .text-wrong { color: #dc2626; font-weight: 800; }
         .hide { display: none; }
-        .status-sending { color: #eab308; font-size: 0.85rem; margin-top: 10px; }
+        .status-sending { color: #d97706; font-size: 0.9rem; margin-top: 10px; font-weight: 700; }
+
         @media print {
             body { background: white; color: black; }
             .game-card { border: none; box-shadow: none; width: 100%; max-width: 100%; color: black; background: white; }
@@ -40,21 +153,22 @@
 
 <div class="game-card">
     <div id="start-screen">
-        <h1>Kuis Bilangan Bulat</h1>
-        <p style="color: #94a3b8; font-size: 0.95rem;">Uji kemampuan operasi bilangan bulat (5 Level, 3 Nyawa, & Timer).</p>
-        <div style="text-align: left; background: #0f172a; padding: 12px; border-radius: 8px; margin: 15px 0; font-size: 0.85rem;">
+        <h1>Kuis Operasi Hitung Bilangan Bulat</h1>
+        <p style="color: #64748b; font-size: 0.95rem; font-weight: 600;">Uji kemampuan operasi bilangan bulat (5 Level, 3 Nyawa, & Timer).</p>
+        
+        <div style="text-align: left; background: #f0f9ff; padding: 14px; border-radius: 14px; margin: 15px 0; font-size: 0.85rem; border: 1px solid #bae6fd; color: #0369a1;">
             <strong>Ketentuan Poin:</strong><br>
             • Level 1: 10 Poin/Soal (60s)<br>
-            • Level 2: 20 Poin/Soal (60s)<br>
-            • Level 3: 30 Poin/Soal (60s)<br>
-            • Level 4: 40 Poin/Soal (60s)<br>
-            • Level 5: 50 Poin/Soal (120s)<br>
+            • Level 2: 15 Poin/Soal (60s)<br>
+            • Level 3: 20 Poin/Soal (60s)<br>
+            • Level 4: 25 Poin/Soal (60s)<br>
+            • Level 5: 30 Poin/Soal (120s)<br>
             • <em>Bonus Tamat: Sisa Nyawa Utuh (Maks +100 Poin)</em>
         </div>
         
         <div style="text-align: left; margin-bottom: 10px;">
-            <label style="font-size: 0.85rem; color: #94a3b8;">Identitas Peserta:</label>
-            <input type="text" id="school-name" placeholder="Sekolah (misal: SMPN 2 Bululawang)" required>
+            <label style="font-size: 0.9rem; color: #475569; font-weight: 700;">Identitas Peserta:</label>
+            <input type="text" id="school-name" placeholder="Nama Sekolah (misal: SMPN 2 Bululawang)" required>
             <input type="text" id="class-name" placeholder="Kelas (misal: 7A)" required>
             <input type="text" id="player-name" placeholder="Nama Lengkap" required>
         </div>
@@ -71,9 +185,9 @@
         <div class="timer-bar-container">
             <div class="timer-bar" id="timer-bar"></div>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; margin-bottom: 10px; font-weight: 700;">
             <span id="question-number">Soal 1 dari 5</span>
-            <span>Sisa Waktu: <strong id="timer-text" style="color: #eab308;">60s</strong></span>
+            <span>Sisa Waktu: <strong id="timer-text" style="color: #d97706;">60s</strong></span>
         </div>
         <div class="question-box" id="question-display">0 + 0</div>
         <form onsubmit="submitAnswer(event)">
@@ -84,16 +198,16 @@
 
     <div id="result-screen" class="hide">
         <h2 id="result-title">Hasil Kuis</h2>
-        <p id="result-subtitle" style="color: #94a3b8;"></p>
+        <p id="result-subtitle" style="color: #64748b; font-weight: 600;"></p>
         
-        <div style="background: #0f172a; padding: 15px; border-radius: 8px; text-align: left; margin-bottom: 15px;">
+        <div style="background: #f8fafc; padding: 16px; border-radius: 14px; text-align: left; margin-bottom: 15px; border: 1px solid #e2e8f0;">
             <p style="margin: 4px 0;"><strong>Sekolah:</strong> <span id="res-school">-</span></p>
             <p style="margin: 4px 0;"><strong>Kelas:</strong> <span id="res-class">-</span></p>
-            <p style="margin: 4px 0;"><strong>Nama Murid:</strong> <span id="res-name">-</span></p>
-            <hr style="border: 0; border-top: 1px solid #334155; margin: 8px 0;">
+            <p style="margin: 4px 0;"><strong>Nama:</strong> <span id="res-name">-</span></p>
+            <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 8px 0;">
             <p style="margin: 4px 0;"><strong>Skor Soal:</strong> <span id="res-base-score">0</span></p>
             <p style="margin: 4px 0;"><strong>Bonus Nyawa:</strong> <span id="res-bonus-score">0</span></p>
-            <p style="margin: 4px 0; font-size: 1.1rem; color: #38bdf8;"><strong>Total Skor Akhir:</strong> <span id="res-score">0</span></p>
+            <p style="margin: 4px 0; font-size: 1.15rem; color: #0284c7;"><strong>Total Skor Akhir:</strong> <span id="res-score">0</span></p>
             <p style="margin: 4px 0;"><strong>Level Terakhir:</strong> <span id="res-level">-</span></p>
         </div>
 
@@ -105,20 +219,20 @@
                 <thead>
                     <tr>
                         <th>Soal</th>
-                        <th>Jawaban Anda</th>
+                        <th>Jawaban Kamu</th>
                         <th>Kunci</th>
                     </tr>
                 </thead>
                 <tbody id="report-body"></tbody>
             </table>
         </div>
-        <button class="btn btn-success no-print" onclick="window.print()">Cetak / Simpan PDF Bukti Nilai</button>
-        <button class="btn no-print" style="background-color: #475569;" onclick="location.reload()">Main Lagi</button>
+        <button class="btn btn-success no-print" onclick="window.print()">Cetak Nilai</button>
+        <button class="btn no-print" style="background-color: #64748b;" onclick="location.reload()">Main Lagi</button>
     </div>
 </div>
 
 <script>
-    // URL GOOGLE APPS SCRIPT ANDA SUDAH TERPASANG PRESISI DI SINI:
+    // URL GOOGLE APPS SCRIPT ANDA:
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvibxnqV1tepnsYDzUMx4JhLG04Q-zh4q2Nc2oQSmIu8zvFLXI35ZiGYbDzKq18fKt8Q/exec";
 
     const levelConfigs = {
@@ -136,13 +250,13 @@
     function generateQuestion(level) {
         let a, b, c, qText, ans;
         if (level === 1) {
-            a = getRandomInt(-20, 20); b = getRandomInt(-20, 20);
+            a = getRandomInt(-30, 30); b = getRandomInt(-30, 30);
             qText = `${a < 0 ? `(${a})` : a} + ${b < 0 ? `(${b})` : b}`; ans = a + b;
         } else if (level === 2) {
-            a = getRandomInt(-20, 20); b = getRandomInt(-20, 20);
+            a = getRandomInt(-30, 30); b = getRandomInt(-30, 30);
             qText = `${a < 0 ? `(${a})` : a} - ${b < 0 ? `(${b})` : b}`; ans = a - b;
         } else if (level === 3) {
-            a = getRandomInt(-12, 12); b = getRandomInt(-12, 12);
+            a = getRandomInt(-20, 20); b = getRandomInt(-20, 20);
             qText = `${a < 0 ? `(${a})` : a} × ${b < 0 ? `(${b})` : b}`; ans = a * b;
         } else if (level === 4) {
             ans = getRandomInt(-10, 10); if (ans === 0) ans = 1;
@@ -263,13 +377,13 @@
         document.getElementById('res-level').innerText = lastLevelName;
 
         if (isWin) {
-            document.getElementById('result-title').innerText = "Selamat! Anda Tamat!";
-            document.getElementById('result-title').style.color = "#4ade80";
-            document.getElementById('result-subtitle').innerText = "Luar biasa! Anda berhasil menyelesaikan 5 Level Aritmetika.";
+            document.getElementById('result-title').innerText = "Selamat! Kamu Berhasil!";
+            document.getElementById('result-title').style.color = "#16a34a";
+            document.getElementById('result-subtitle').innerText = "Luar biasa! Kamu berhasil menyelesaikan 5 Level Game Bilangan Bulat.";
         } else {
             document.getElementById('result-title').innerText = "Game Over!";
-            document.getElementById('result-title').style.color = "#f87171";
-            document.getElementById('result-subtitle').innerText = "Nyawa Anda telah habis. Tetap semangat dan coba lagi!";
+            document.getElementById('result-title').style.color = "#dc2626";
+            document.getElementById('result-subtitle').innerText = "Nyawamu telah habis. Tetap semangat dan coba lagi!";
         }
 
         const tbody = document.getElementById('report-body'); tbody.innerHTML = '';
@@ -279,7 +393,6 @@
             tbody.appendChild(tr);
         });
 
-        // Pengiriman otomatis ke Google Sheets
         sendDataToGoogleSheets(schoolName, className, playerName, totalScore, lastLevelName, gameStatus);
     }
 
@@ -287,7 +400,7 @@
         const statusDiv = document.getElementById('send-status');
         if (!GOOGLE_SCRIPT_URL) {
             statusDiv.innerText = "ℹ️ Nilai belum terhubung ke Google Sheets Guru.";
-            statusDiv.style.color = "#94a3b8";
+            statusDiv.style.color = "#64748b";
             return;
         }
 
@@ -299,11 +412,11 @@
         })
         .then(() => {
             statusDiv.innerText = "✅ Nilai berhasil tersimpan otomatis di Google Sheets Guru!";
-            statusDiv.style.color = "#4ade80";
+            statusDiv.style.color = "#16a34a";
         })
         .catch(() => {
             statusDiv.innerText = "⚠️ Gagal mengirim data otomatis. Silakan screenshot halaman ini.";
-            statusDiv.style.color = "#f87171";
+            statusDiv.style.color = "#dc2626";
         });
     }
 </script>
