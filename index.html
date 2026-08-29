@@ -419,6 +419,17 @@
             statusDiv.style.color = "#dc2626";
         });
     }
+    // ==========================================
+    // DETEKSI PINDAH TAB / ANTI-CHEAT
+    // ==========================================
+    document.addEventListener("visibilitychange", function() {
+        const isGameActive = !document.getElementById('game-screen').classList.contains('hide');
+        if (document.hidden && isGameActive) {
+            clearInterval(timer);
+            alert("⚠️ PERINGATAN KECURANGAN!\nKamu terdeteksi meninggalkan halaman kuis/berpindah tab. Permainan otomatis dihentikan!");
+            endGame(false);
+        }
+    });
 </script>
 </body>
 </html>
