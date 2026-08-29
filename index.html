@@ -191,7 +191,7 @@
         </div>
         <div class="question-box" id="question-display">0 + 0</div>
         <form onsubmit="submitAnswer(event)">
-            <input type="number" id="answer-input" placeholder="Ketik jawaban..." autocomplete="off" autofocus>
+            <input type="text" inputmode="decimal" id="answer-input" placeholder="Ketik jawaban..." autocomplete="off" autofocus>
             <button type="submit" class="btn">Kirim Jawaban</button>
         </form>
     </div>
@@ -335,11 +335,14 @@
     }
 
     function submitAnswer(e) {
-        e.preventDefault(); clearInterval(timer);
-        const userAns = parseInt(document.getElementById('answer-input').value);
-        handleAnswer(isNaN(userAns) ? null : userAns, false);
-    }
-
+    e.preventDefault(); 
+    clearInterval(timer);
+    // trim() untuk menghapus spasi yang tidak sengaja terketik
+    const val = document.getElementById('answer-input').value.trim();
+    const userAns = parseInt(val, 10);
+    handleAnswer(isNaN(userAns) ? null : userAns, false);
+}
+ 
     function handleAnswer(userAns, isTimeout) {
         const isCorrect = !isTimeout && (userAns === currentQuestion.correctAnswer);
         gameHistory.push({
